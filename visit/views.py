@@ -61,12 +61,11 @@ def delete_user(request, id):
    return redirect('showUsers')
 
 
-def edit_user(request):
+def edit_user(request, id):
    if request.user.is_authenticated:
-      form = EditUserForm()
-
+      current_user = User.objects.get(id=id)
+      form = EditUserForm(instance=current_user)
       if request.method == 'POST':
-         current_user = User.objects.get(id=request.user.id)
          form = EditUserForm(data=request.POST, instance=current_user)
          if form.is_valid():
             form.save()
@@ -76,7 +75,7 @@ def edit_user(request):
             messages.success(request, ('Erro ao editar usuario: ', form.errors))
             return redirect('showUsers')
       else:
-         form = EditUserForm(instance=request.user)
+         form = EditUserForm(instance=current_user)
 
       context = {'form': form}
       return render(request, 'authenticate/edit-user.html', context)
