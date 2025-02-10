@@ -55,7 +55,7 @@ def show_users(request):
    context  = {'users':usersList}
    return render(request, 'authenticate/showUsers.html', context)
 
-def delete_user(request, id):
+def delete_user(id):
    user_deleted = User.objects.get(id=id)
    user_deleted.delete()
    return redirect('showUsers')
